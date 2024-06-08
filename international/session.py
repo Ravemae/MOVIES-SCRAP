@@ -1,5 +1,5 @@
-from db import engine
-from model import International
+from .db import engine
+from .model import International
 from sqlmodel import Session, select
 
 
