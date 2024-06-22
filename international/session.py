@@ -3,19 +3,19 @@ from .model import International
 from sqlmodel import Session, select
 
 
-async def add_movie(name, image, date, download_link, description):
+def add_movie(name, image, date, download_link, description):
     try:
         with Session(engine) as session:
-            movie = await International(name=name, image=image, date=date, download_link=download_link, description=description)
+            movie = International(name=name, image=image, date=date, download_link=download_link, description=description)
             session.add(movie)
             session.commit()
             return "Movie added to database"
     except Exception as e:
             return f"Error in adding Movie: {e}"
         
-async def get_all_movies():
+def get_all_movies():
     with Session(engine) as session:
-        movie = await select(International)
+        movie = select(International)
         results = session.exec(movie).all()
         return results
         

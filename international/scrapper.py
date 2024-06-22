@@ -1,15 +1,19 @@
 import requests
-from session import add_movie
+from .session import add_movie
 from bs4 import BeautifulSoup
+import asyncio
 
 
-def fetch():
+async def fetch_page(url):
+    page_content = requests.get(url).text
+    return BeautifulSoup(page_content, 'html.parser')
+
+async def fetch():
     base_url = "https://nkiri.com/category/international/"
-    for num in range(1, 80):
+    for num in range(6, 81):
         url = f'{base_url}page/{num}'
-        page_content = requests.get(url)
         print(f"Getting data for page {num}")
-        soup = BeautifulSoup(page_content.text, 'html.parser')
+        soup = await fetch_page(url)
         for movie in soup.find_all('article'):
             name = movie.find('h2', {'class': "blog-entry-title entry-title"})
             title = name.text.strip()
@@ -40,5 +44,8 @@ def fetch():
                     desc_text = desc.text.strip()
                     break
             add_movie(name=title, image=image, date=f_date, download_link=download_link, description=desc_text)
-fetch()
+
+async def main():            
+    await fetch()
 print("Successfully added into Database! :)")
+asyncio.run(main())

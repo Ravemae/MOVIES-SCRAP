@@ -6,8 +6,8 @@ from fastapi import HTTPException
 router = APIRouter()
 
 @router.get("/all")
-async def all_movies():
-    movie = await get_all_movies()
+def all_movies():
+    movie = get_all_movies()
     if not movie:
         return HTTPException(status_code=404, message = "Movies not found")
     return movie
